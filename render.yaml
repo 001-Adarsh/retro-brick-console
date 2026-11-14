@@ -1,0 +1,71 @@
+# Render Static Site Blueprint Configuration
+# Project: Retro Brick Game Console (23-in-1 Handheld LCD Emulator)
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: static
+    name: retro-brick-console
+    env: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+
+    # Client-side SPA routing fallback (redirects all requests to root index.html)
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    # Security & Performance Response Headers
+    headers:
+      # Aggressive long-term caching for immutable hashed assets
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+
+      # Audio and font assets caching
+      - path: /audio/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /fonts/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+
+      # Web App Manifest & Service Worker revalidation
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /manifest.json
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+
+      # HTML entry point - always revalidate for instant zero-downtime updates
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+
+      # Security Headers applied globally across all routes
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains; preload
+      - path: /*
+        name: Permissions-Policy
+        value: accelerometer=(), autoplay=(), camera=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=()
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: svg+xml:; media-src 'self' data: blob:; connect-src 'self';"
