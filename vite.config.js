@@ -16,5 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     root: resolve(__dirname),
+    include: ['tests/**/*.test.js'],
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
   },
 });

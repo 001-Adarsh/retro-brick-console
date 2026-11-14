@@ -196,9 +196,9 @@ export class InputController {
    */
   get p1() {
     return {
-      isDown: (action) => this.isDown(`P1_${action}`) || this.isDown(`P1_ACTION_${action}`) || this.isDown(action),
-      isJustPressed: (action) => this.isJustPressed(`P1_${action}`) || this.isJustPressed(`P1_ACTION_${action}`) || this.isJustPressed(action),
-      isJustReleased: (action) => this.isJustReleased(`P1_${action}`) || this.isJustReleased(`P1_ACTION_${action}`) || this.isJustReleased(action),
+      isDown: (action) => this.isDown(`P1_${action}`) || this.isDown(`P1_ACTION_${action}`) || (action.startsWith('P1_') && this.isDown(action)),
+      isJustPressed: (action) => this.isJustPressed(`P1_${action}`) || this.isJustPressed(`P1_ACTION_${action}`) || (action.startsWith('P1_') && this.isJustPressed(action)),
+      isJustReleased: (action) => this.isJustReleased(`P1_${action}`) || this.isJustReleased(`P1_ACTION_${action}`) || (action.startsWith('P1_') && this.isJustReleased(action)),
     };
   }
 
