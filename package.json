@@ -1,0 +1,19 @@
+{
+  "name": "retro-brick-console",
+  "version": "1.0.0",
+  "description": "Authentic Retro Brick Game Handheld 23-in-1 Console built with Web Audio & 10x20 Virtual LCD Matrix",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "happy-dom": "^21.0.4",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  }
+}
