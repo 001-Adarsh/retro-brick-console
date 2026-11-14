@@ -13,6 +13,7 @@ export class FourInLine extends BaseGame {
     this.grid = []; // 6 rows x 7 cols: 0 = empty, 1 = Player, 2 = AI
     this.selectedCol = 3;
     this.isAiTurn = false;
+    this.currentTurn = 1; // 1 = Player 1, 2 = Player 2 / AI
     this.aiTimer = 0;
     this.roundOver = false;
     this.roundOverTimer = 0;
@@ -20,6 +21,7 @@ export class FourInLine extends BaseGame {
 
   init(context) {
     super.init(context);
+    this.currentTurn = 1;
     this.resetBoard();
   }
 
@@ -27,6 +29,7 @@ export class FourInLine extends BaseGame {
     this.grid = Array.from({ length: this.rows }, () => new Uint8Array(this.cols));
     this.selectedCol = 3;
     this.isAiTurn = false;
+    this.currentTurn = 1;
     this.aiTimer = 0;
     this.roundOver = false;
     this.roundOverTimer = 0;
@@ -47,8 +50,10 @@ export class FourInLine extends BaseGame {
       return;
     }
 
-    // AI Turn
-    if (this.isAiTurn) {
+    const isDuo = !!this.context.isDuoMode;
+
+    // AI Turn (Solo mode only)
+    if (!isDuo && this.isAiTurn) {
       this.aiTimer += deltaTime;
       if (this.aiTimer >= 0.5) {
         this.makeAiMove();
@@ -57,25 +62,35 @@ export class FourInLine extends BaseGame {
       return;
     }
 
-    // Player Column Selection
-    if (input.isJustPressed('LEFT') && this.selectedCol > 0) {
+    // Active input for turn (Supports P1, P2, and shared console buttons)
+    const activeInput = isDuo && this.currentTurn === 2 ? input.p2 : input.p1;
+    const moveLeft = activeInput.isJustPressed('LEFT') || input.isJustPressed('LEFT');
+    const moveRight = activeInput.isJustPressed('RIGHT') || input.isJustPressed('RIGHT');
+    const dropToken = activeInput.isJustPressed('ACTION_A') || input.isJustPressed('ACTION_A');
+
+    // Column Selection
+    if (moveLeft && this.selectedCol > 0) {
       this.selectedCol--;
       sound.playMove();
-    } else if (input.isJustPressed('RIGHT') && this.selectedCol < this.cols - 1) {
+    } else if (moveRight && this.selectedCol < this.cols - 1) {
       this.selectedCol++;
       sound.playMove();
     }
 
     // Drop Token (Button A)
-    if (input.isJustPressed('ACTION_A')) {
+    if (dropToken) {
       const dropRow = this.getLowestEmptyRow(this.selectedCol);
       if (dropRow !== -1) {
-        this.grid[dropRow][this.selectedCol] = 1;
+        const token = isDuo ? this.currentTurn : 1;
+        this.grid[dropRow][this.selectedCol] = token;
         sound.playDrop();
 
-        if (this.checkWin(1)) {
+        if (this.checkWin(token)) {
           sound.playVictory();
           this.addScore(1000);
+          if (isDuo && typeof this.context.onDuoGameOver === 'function') {
+            this.context.onDuoGameOver(`PLAYER ${token}`, 1000, 0);
+          }
           this.roundOver = true;
           return;
         } else if (this.isFull()) {
@@ -84,8 +99,12 @@ export class FourInLine extends BaseGame {
           return;
         }
 
-        this.isAiTurn = true;
-        this.aiTimer = 0;
+        if (isDuo) {
+          this.currentTurn = this.currentTurn === 1 ? 2 : 1;
+        } else {
+          this.isAiTurn = true;
+          this.aiTimer = 0;
+        }
       }
     }
   }

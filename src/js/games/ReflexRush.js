@@ -18,6 +18,9 @@ export class ReflexRush extends BaseGame {
     this.state = 'WAITING'; // 'WAITING', 'ACTIVE', 'FEEDBACK'
     this.feedbackTimer = 0;
     this.wasSuccess = false;
+    this.p1Score = 0;
+    this.p2Score = 0;
+    this.duoWinner = null;
   }
 
   init(context) {
@@ -30,6 +33,9 @@ export class ReflexRush extends BaseGame {
 
     this.trialsCompleted = 0;
     this.streak = 0;
+    this.p1Score = 0;
+    this.p2Score = 0;
+    this.duoWinner = null;
     this.startNewTrial();
   }
 
@@ -91,7 +97,64 @@ export class ReflexRush extends BaseGame {
       return;
     }
 
-    // Evaluate Input
+    // Duo Mode: 2-Player Quick-Draw Duel
+    if (this.context.isDuoMode) {
+      const p1Buzz = input.p1.isJustPressed('ACTION_A') || input.isJustPressed('P1_ACTION_A');
+      const p2Buzz = input.p2.isJustPressed('ACTION_A') || input.isJustPressed('P2_ACTION_A');
+
+      if (this.currentPrompt.type === 'FAKEOUT') {
+        if (p1Buzz) {
+          this.p2Score++;
+          sound.playExplosion();
+          this.duoWinner = 'P2';
+          this.state = 'FEEDBACK';
+          this.feedbackTimer = 0.5;
+          if (typeof this.context.onDuoScore === 'function') this.context.onDuoScore(this.p1Score, this.p2Score);
+          return;
+        } else if (p2Buzz) {
+          this.p1Score++;
+          sound.playExplosion();
+          this.duoWinner = 'P1';
+          this.state = 'FEEDBACK';
+          this.feedbackTimer = 0.5;
+          if (typeof this.context.onDuoScore === 'function') this.context.onDuoScore(this.p1Score, this.p2Score);
+          return;
+        }
+      } else {
+        if (p1Buzz) {
+          this.p1Score++;
+          sound.playScore();
+          this.duoWinner = 'P1';
+          this.state = 'FEEDBACK';
+          this.feedbackTimer = 0.5;
+          if (typeof this.context.onDuoScore === 'function') this.context.onDuoScore(this.p1Score, this.p2Score);
+          if (this.p1Score >= 10) {
+            if (typeof this.context.onDuoGameOver === 'function') {
+              this.context.onDuoGameOver('PLAYER 1', this.p1Score, this.p2Score);
+            }
+            this.gameOver();
+          }
+          return;
+        } else if (p2Buzz) {
+          this.p2Score++;
+          sound.playScore();
+          this.duoWinner = 'P2';
+          this.state = 'FEEDBACK';
+          this.feedbackTimer = 0.5;
+          if (typeof this.context.onDuoScore === 'function') this.context.onDuoScore(this.p1Score, this.p2Score);
+          if (this.p2Score >= 10) {
+            if (typeof this.context.onDuoGameOver === 'function') {
+              this.context.onDuoGameOver('PLAYER 2', this.p1Score, this.p2Score);
+            }
+            this.gameOver();
+          }
+          return;
+        }
+      }
+      return;
+    }
+
+    // Evaluate Input (Solo Mode)
     const pressedA = input.isJustPressed('ACTION_A');
     const pressedB = input.isJustPressed('ACTION_B');
     const pressedUp = input.isJustPressed('UP');

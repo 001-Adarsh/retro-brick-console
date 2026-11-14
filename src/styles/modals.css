@@ -270,6 +270,45 @@
   letter-spacing: 0.5px;
 }
 
+.menu-mode-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.menu-mode-btn {
+  background: rgba(26, 43, 26, 0.08);
+  border: 1px solid var(--lcd-pixel-lit);
+  color: var(--lcd-pixel-lit);
+  font-family: var(--font-lcd-segment);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.menu-mode-btn:hover,
+.menu-mode-btn:focus-visible {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg);
+}
+
+.menu-mode-btn.duo-active {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg);
+  box-shadow: 0 0 4px rgba(26, 43, 26, 0.4);
+}
+
+.duo-score {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  font-family: var(--font-lcd-segment);
+  font-weight: 900;
+}
+
 /* ==========================================================================
    3. PAUSE MENU OVERLAY
    ========================================================================== */

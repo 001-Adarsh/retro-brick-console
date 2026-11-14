@@ -60,6 +60,17 @@ window.addEventListener('DOMContentLoaded', () => {
       onLivesChange: (lives) => {
         hud.updateLives(lives);
       },
+      onDuoScore: (p1, p2) => {
+        hud.updateDuoScores(p1, p2);
+      },
+      onDuoGameOver: (winner, p1, p2) => {
+        screenManager.transitionTo(ScreenState.GAMEOVER, {
+          duoWinner: winner,
+          score: p1,
+          p2Score: p2,
+          level: hud.level,
+        });
+      },
       onGameOver: (finalScore) => {
         const gameId = engine.activeGameId;
         if (gameId) {
@@ -125,6 +136,22 @@ window.addEventListener('DOMContentLoaded', () => {
       hud.setMuted(sound.isMuted());
     }
   });
+
+  // Mode selection in settings
+  const btnModeSolo = document.getElementById('setting-mode-solo');
+  const btnModeDuo = document.getElementById('setting-mode-duo');
+  if (btnModeSolo && btnModeDuo) {
+    btnModeSolo.addEventListener('click', () => {
+      screenManager.setDuoMode(false);
+      btnModeSolo.classList.add('active');
+      btnModeDuo.classList.remove('active');
+    });
+    btnModeDuo.addEventListener('click', () => {
+      screenManager.setDuoMode(true);
+      btnModeDuo.classList.add('active');
+      btnModeSolo.classList.remove('active');
+    });
+  }
 
   // Dedicated hardware button shortcuts:
   // Sound button

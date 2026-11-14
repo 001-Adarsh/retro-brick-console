@@ -60,8 +60,9 @@ export class ScreenManager {
     this.selectedGameIndex = 0;
     this.pauseOptionIndex = 0;
 
-    // Difficulty and Theme settings
+    // Difficulty, Mode and Theme settings
     this.difficulty = 'MEDIUM';
+    this.isDuoMode = false;
     this.theme = 'classic';
     this.volume = 80;
 
@@ -70,6 +71,31 @@ export class ScreenManager {
     this.onGameRestart = null;
 
     this._bindDomEvents();
+  }
+
+  /**
+   * Toggle between 1P Solo and 2P Duo Mode.
+   */
+  toggleDuoMode() {
+    this.setDuoMode(!this.isDuoMode);
+  }
+
+  /**
+   * Set Solo or Duo mode.
+   * @param {boolean} enabled 
+   */
+  setDuoMode(enabled) {
+    this.isDuoMode = !!enabled;
+    if (this.hud && typeof this.hud.setDuoMode === 'function') {
+      this.hud.setDuoMode(this.isDuoMode);
+    }
+    if (this.engine && typeof this.engine.setDuoMode === 'function') {
+      this.engine.setDuoMode(this.isDuoMode);
+    }
+    this._updateMenuCard();
+    if (this.hud && typeof this.hud.announce === 'function') {
+      this.hud.announce(this.isDuoMode ? 'Duo Mode Enabled: 2 Players.' : 'Solo Mode Enabled: 1 Player.');
+    }
   }
 
   /**
@@ -241,6 +267,13 @@ export class ScreenManager {
 
     const hiScore = this.getHighScore(game.id);
     if (elHiScore) elHiScore.textContent = `HI-SCORE: ${String(hiScore).padStart(6, '0')}`;
+
+    const btnMode = document.getElementById('menu-mode-toggle');
+    if (btnMode) {
+      btnMode.textContent = this.isDuoMode ? 'MODE: 2P DUO' : 'MODE: 1P SOLO';
+      btnMode.classList.toggle('duo-active', this.isDuoMode);
+      btnMode.setAttribute('aria-pressed', String(this.isDuoMode));
+    }
 
     this._drawGamePreview(game);
   }
@@ -715,6 +748,10 @@ export class ScreenManager {
     // Menu launch button
     const btnStart = document.getElementById('menu-btn-start');
     if (btnStart) btnStart.addEventListener('click', () => this.launchSelectedGame());
+
+    // Menu mode toggle (Solo 1P vs Duo 2P)
+    const btnMode = document.getElementById('menu-mode-toggle');
+    if (btnMode) btnMode.addEventListener('click', () => this.toggleDuoMode());
 
     // Menu sub-links
     const linkScores = document.getElementById('menu-link-scores');

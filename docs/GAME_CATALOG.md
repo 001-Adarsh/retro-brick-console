@@ -341,6 +341,7 @@
   - English Curve: Moving the paddle at the precise instant of impact imparts lateral spin, causing the ball trajectory to curve mid-flight!
   - Button A triggers a "Smash Strike" if timed right as the ball arrives, accelerating the rebound by 50%.
   - First player to reach 7 goals wins the match.
+  - **Duo Mode (2-Player Head-to-Head)**: When Duo Mode is enabled, AI tracking is disabled! Player 1 operates the bottom paddle (`A` / `D`), and Player 2 operates the top paddle (`ArrowLeft` / `ArrowRight`) on the same keyboard or screen.
 - **Handheld Controls:**
   - **D-Pad Left / Right:** Move paddle horizontally.
   - **Button A:** Smash Strike (high-velocity spike on impact).
@@ -1138,6 +1139,7 @@ Current Time: 182ms -> GODLIKE!
   - Player has a strict countdown window (from 1200ms down to 350ms) to execute the command.
   - Pressing the wrong button, reacting too slowly, or moving during a Fake-Out costs 1 life.
   - Every 5 consecutive successes triggers a "Speed Rush", accelerating the challenge tempo.
+  - **Duo Mode (2-Player Quick-Draw Duel)**: In Duo Mode, ReflexRush transforms into a western-style quick-draw duel! When the visual buzzer triggers, Player 1 strikes `Space` and Player 2 strikes `Enter`. The first player whose signal registers wins the round; false starts hand the point to the opponent!
 - **Handheld Controls:**
   - Contextual based on on-screen directive:
     - **D-Pad Up / Down / Left / Right:** Directional evasion/prompts.

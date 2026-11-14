@@ -17,6 +17,7 @@ export class HUD {
     this.elLives = elements.lives !== undefined ? elements.lives : (hasDoc ? document.getElementById('hud-lives') : null);
     this.elFlagPause = elements.flagPause !== undefined ? elements.flagPause : (hasDoc ? document.getElementById('hud-flag-pause') : null);
     this.elFlagSound = elements.flagSound !== undefined ? elements.flagSound : (hasDoc ? document.getElementById('hud-flag-sound') : null);
+    this.elFlagMode = elements.flagMode !== undefined ? elements.flagMode : (hasDoc ? document.getElementById('hud-flag-mode') : null);
     this.subCanvas = elements.submatrixCanvas !== undefined ? elements.submatrixCanvas : (hasDoc ? document.getElementById('submatrix-canvas') : null);
     this.ghostGrid = elements.ghostGrid !== undefined ? elements.ghostGrid : (hasDoc ? document.getElementById('ghost-grid') : null);
     this.liveAnnouncer = elements.liveAnnouncer !== undefined ? elements.liveAnnouncer : (hasDoc ? document.getElementById('aria-live-announcer') : null);
@@ -26,6 +27,9 @@ export class HUD {
     // Cached values
     this.score = 0;
     this.hiScore = 0;
+    this.p1Score = 0;
+    this.p2Score = 0;
+    this.isDuo = false;
     this.level = 1;
     this.speed = 1;
     this.lives = 3;
@@ -92,6 +96,33 @@ export class HUD {
     this.score = score;
     if (this.elScore) {
       this.elScore.innerHTML = this.format7Segment(score);
+    }
+  }
+
+  /**
+   * Set HUD game mode (Solo 1P vs Duo 2P).
+   * @param {boolean} isDuo 
+   */
+  setDuoMode(isDuo) {
+    this.isDuo = !!isDuo;
+    if (this.elFlagMode) {
+      this.elFlagMode.textContent = this.isDuo ? '2P' : '1P';
+      this.elFlagMode.classList.toggle('active', this.isDuo);
+    }
+  }
+
+  /**
+   * Update Duo Mode scores (P1 vs P2).
+   * @param {number} p1Score 
+   * @param {number} p2Score 
+   */
+  updateDuoScores(p1Score, p2Score) {
+    this.p1Score = p1Score;
+    this.p2Score = p2Score;
+    if (this.elScore) {
+      const s1 = String(Math.floor(p1Score)).padStart(2, '0');
+      const s2 = String(Math.floor(p2Score)).padStart(2, '0');
+      this.elScore.innerHTML = `<span class="duo-score">1P:${s1} 2P:${s2}</span>`;
     }
   }
 

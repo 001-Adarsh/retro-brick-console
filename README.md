@@ -17,6 +17,7 @@ An authentic, responsive browser-based emulation of the iconic 1980s/1990s monoc
 - [Overview & Aesthetics](#-overview--aesthetics)
 - [Key Features](#-key-features)
 - [The 23-Game Catalog](#-the-23-game-catalog)
+- [Duo Mode (Local 2-Player Multiplayer)](#-duo-mode-local-2-player-multiplayer)
 - [Console Controls & Input System](#-console-controls--input-system)
 - [Architecture & Tech Stack](#-architecture--tech-stack)
 - [Project Directory Structure](#-project-directory-structure)
@@ -92,6 +93,24 @@ Each game implements the standardized `IGame` lifecycle contract (`init`, `updat
 
 ---
 
+## 👥 Duo Mode (Local 2-Player Multiplayer)
+
+The console includes an authentic **Duo Mode** enabling two players to compete head-to-head or take turns on a single shared keyboard or device.
+
+### Supported Duo Games
+- **Bounce Duel (Pong Rally)**: Real-time head-to-head tennis. Player 1 controls the bottom paddle (`A` / `D`), while Player 2 controls the top paddle (`ArrowLeft` / `ArrowRight`). First to 5 points wins!
+- **Grid Tactics (Tic-Tac-Toe LCD)**: Turn-based strategic duel. Player 1 places `X` marks, Player 2 places `O` marks.
+- **Four In Line (Connect-4 Matrix)**: Turn-based vertical gravity dropping duel. Player 1 drops solid bricks, Player 2 drops hollow perimeter bricks.
+- **Reflex Rush (Quick-Draw Reaction Duel)**: Split-second buzzer battle! Both players watch the matrix countdown. When the signal flashes, the first player to tap their action key (`Space` for P1, `Enter` for P2) claims the point.
+- **Score-Attack Duo**: In single-player arcade games, Duo Mode tracks alternate-round high score battles between Player 1 and Player 2 with real-time HUD scoreboard switching.
+
+### Activating Duo Mode
+1. In the Game Select menu, click the **DUO MODE** button, or press the `[DUO]` toggle in the Settings modal.
+2. The HUD displays a glowing `DUO` indicator badge and dual score readouts (`P1: 0000` / `P2: 0000`).
+3. Press `START` to begin the 2-player match!
+
+---
+
 ## 🎮 Console Controls & Input System
 
 The console offers full parity between physical controls and on-screen virtual tactile buttons:
@@ -112,7 +131,7 @@ The console offers full parity between physical controls and on-screen virtual t
                       └──────────────────────────────┘
 ```
 
-### Input Mapping Table
+### Input Mapping Table (Solo Mode)
 
 | Function | Virtual Button | Keyboard Key(s) | Gamepad Button |
 | :--- | :--- | :--- | :--- |
@@ -126,6 +145,15 @@ The console offers full parity between physical controls and on-screen virtual t
 | **Start / Pause** | `START` button | `Enter` / `P` | Start / Options |
 | **Reset Game** | `RESET` button | `Escape` / `R` | Guide / Home |
 | **Mute / Sound Toggle** | `SOUND` button | `M` | Right Shoulder |
+
+### Duo Mode Split Keyboard Controls (Local 2-Player)
+
+| Player | Movement (D-Pad) | Action A (Primary) | Action B (Secondary) |
+| :--- | :--- | :--- | :--- |
+| **Player 1** (Left Side) | `W` (Up), `S` (Down), `A` (Left), `D` (Right) | `Space` | `Left Shift` |
+| **Player 2** (Right Side) | `↑` (Up), `↓` (Down), `←` (Left), `→` (Right) | `Enter` or `L` | `Right Shift` |
+
+*Note: On touch screens and mobile devices, on-screen controls route to Player 1, and players can share the device taking alternating turns.*
 
 ---
 

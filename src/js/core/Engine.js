@@ -55,12 +55,32 @@ export class Engine {
     this.activeGame = null;
     this.activeGameId = null;
     this.difficulty = this.storage.getSettings().difficulty || 'MEDIUM';
+    this.isDuoMode = options.isDuoMode || false;
 
     this.rafId = null;
     this.lastTime = 0;
     this.accumulator = 0;
 
     this._loop = this._loop.bind(this);
+  }
+
+  /**
+   * Updates console mode (Solo 1P vs Duo 2P).
+   * @param {boolean} enabled 
+   */
+  setDuoMode(enabled) {
+    this.isDuoMode = !!enabled;
+    if (this.activeGame && !this.activeGame.isOver) {
+      this.activeGame.init(this.getContext());
+    }
+  }
+
+  /**
+   * Returns true if Duo mode is active.
+   * @returns {boolean}
+   */
+  isDuo() {
+    return this.isDuoMode;
   }
 
   /**
@@ -259,10 +279,22 @@ export class Engine {
         }
       },
       difficulty: this.difficulty,
+      isDuoMode: this.isDuoMode,
+      playerCount: this.isDuoMode ? 2 : 1,
       onScore: (points) => this._handleScore(points),
       onGameOver: (finalScore) => this._handleGameOver(finalScore),
       onLevelUp: (newLevel) => this._handleLevelUp(newLevel),
-      onLivesChange: (lives) => this._handleLivesChange(lives)
+      onLivesChange: (lives) => this._handleLivesChange(lives),
+      onDuoScore: (p1Score, p2Score) => {
+        if (this.callbacks && typeof this.callbacks.onDuoScore === 'function') {
+          this.callbacks.onDuoScore(p1Score, p2Score);
+        }
+      },
+      onDuoGameOver: (winner, p1Score, p2Score) => {
+        if (this.callbacks && typeof this.callbacks.onDuoGameOver === 'function') {
+          this.callbacks.onDuoGameOver(winner, p1Score, p2Score);
+        }
+      }
     };
   }
 

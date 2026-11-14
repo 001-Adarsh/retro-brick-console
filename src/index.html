@@ -50,6 +50,25 @@
           <span>Menu / Cancel</span>
           <kbd class="key-badge">Esc</kbd>
         </li>
+        <li class="key-binding-divider" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.2); font-weight: bold; color: #ffeb3b;">
+          <span>2-PLAYER DUO CONTROLS</span>
+        </li>
+        <li class="key-binding-item">
+          <span>P1 Move / Steer</span>
+          <div><kbd class="key-badge">W A S D</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>P1 Action A / B</span>
+          <div><kbd class="key-badge">Space / J</kbd> <kbd class="key-badge">Shift / K</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>P2 Move / Steer</span>
+          <div><kbd class="key-badge">▲ ▼ ◄ ►</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>P2 Action A / B</span>
+          <div><kbd class="key-badge">Enter / L</kbd> <kbd class="key-badge">ShiftR / /</kbd></div>
+        </li>
       </ul>
     </aside>
 
@@ -151,6 +170,7 @@
                 <div class="hud-flags-row">
                   <span class="hud-flag-badge" id="hud-flag-pause">PAUSE</span>
                   <span class="hud-flag-badge active" id="hud-flag-sound">♪ ON</span>
+                  <span class="hud-flag-badge active" id="hud-flag-mode">1P</span>
                 </div>
               </aside>
             </div>
@@ -196,7 +216,10 @@
                   </div>
 
                   <div class="menu-hiscore-text" id="menu-game-hiscore">HI-SCORE: 000000</div>
-                  <button class="lcd-btn" id="menu-btn-start" style="width: 140px; margin-top: 4px;">PLAY [A / START]</button>
+                  <div class="menu-mode-row" style="margin: 4px 0;">
+                    <button class="menu-mode-btn" id="menu-mode-toggle" aria-label="Toggle Solo or Duo Mode" aria-pressed="false">MODE: 1P SOLO</button>
+                  </div>
+                  <button class="lcd-btn" id="menu-btn-start" style="width: 140px; margin-top: 2px;">PLAY [A / START]</button>
                   
                   <div class="menu-sub-links">
                     <button class="menu-link-btn" id="menu-link-scores">SCORES</button>
@@ -315,6 +338,15 @@
                       <button class="segmented-btn" data-diff="EASY">EASY</button>
                       <button class="segmented-btn active" data-diff="MEDIUM">MED</button>
                       <button class="segmented-btn" data-diff="HARD">HARD</button>
+                    </div>
+                  </div>
+
+                  <!-- Game Mode: Solo 1P vs Duo 2P -->
+                  <div class="settings-item">
+                    <label>GAME MODE:</label>
+                    <div class="segmented-group" id="setting-mode-group">
+                      <button class="segmented-btn active" id="setting-mode-solo">1P SOLO</button>
+                      <button class="segmented-btn" id="setting-mode-duo">2P DUO</button>
                     </div>
                   </div>
 

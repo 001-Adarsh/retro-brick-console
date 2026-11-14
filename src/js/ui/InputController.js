@@ -17,6 +17,22 @@ export const InputActions = Object.freeze({
   SOUND: 'SOUND',
   PAUSE: 'PAUSE',
   MENU: 'MENU',
+
+  // Player 1 Dual Inputs
+  P1_UP: 'P1_UP',
+  P1_DOWN: 'P1_DOWN',
+  P1_LEFT: 'P1_LEFT',
+  P1_RIGHT: 'P1_RIGHT',
+  P1_ACTION_A: 'P1_ACTION_A',
+  P1_ACTION_B: 'P1_ACTION_B',
+
+  // Player 2 Dual Inputs
+  P2_UP: 'P2_UP',
+  P2_DOWN: 'P2_DOWN',
+  P2_LEFT: 'P2_LEFT',
+  P2_RIGHT: 'P2_RIGHT',
+  P2_ACTION_A: 'P2_ACTION_A',
+  P2_ACTION_B: 'P2_ACTION_B',
 });
 
 // Default keyboard key mapping to InputActions
@@ -52,6 +68,35 @@ const DEFAULT_KEY_MAP = {
   KeyM: InputActions.SOUND,
   KeyR: InputActions.RESET,
   Escape: InputActions.MENU,
+};
+
+// Duo mode mapping for independent Player 1 and Player 2 controls
+const DUO_KEY_MAP = {
+  // Player 1: WASD + Space/J/Z (A) + ShiftLeft/K/X (B)
+  KeyW: InputActions.P1_UP,
+  KeyS: InputActions.P1_DOWN,
+  KeyA: InputActions.P1_LEFT,
+  KeyD: InputActions.P1_RIGHT,
+  Space: InputActions.P1_ACTION_A,
+  KeyJ: InputActions.P1_ACTION_A,
+  KeyZ: InputActions.P1_ACTION_A,
+  ShiftLeft: InputActions.P1_ACTION_B,
+  KeyK: InputActions.P1_ACTION_B,
+  KeyX: InputActions.P1_ACTION_B,
+
+  // Player 2: Arrow keys + Enter/L/Num0 (A) + ShiftRight/Slash/Num1/U (B)
+  ArrowUp: InputActions.P2_UP,
+  ArrowDown: InputActions.P2_DOWN,
+  ArrowLeft: InputActions.P2_LEFT,
+  ArrowRight: InputActions.P2_RIGHT,
+  Enter: InputActions.P2_ACTION_A,
+  KeyL: InputActions.P2_ACTION_A,
+  Numpad0: InputActions.P2_ACTION_A,
+  Period: InputActions.P2_ACTION_A,
+  ShiftRight: InputActions.P2_ACTION_B,
+  Slash: InputActions.P2_ACTION_B,
+  Numpad1: InputActions.P2_ACTION_B,
+  KeyU: InputActions.P2_ACTION_B,
 };
 
 export class InputController {
@@ -144,6 +189,28 @@ export class InputController {
    */
   isJustReleased(action) {
     return !!this.justReleased.get(action);
+  }
+
+  /**
+   * Player 1 input proxy helper for Duo mode.
+   */
+  get p1() {
+    return {
+      isDown: (action) => this.isDown(`P1_${action}`) || this.isDown(`P1_ACTION_${action}`) || this.isDown(action),
+      isJustPressed: (action) => this.isJustPressed(`P1_${action}`) || this.isJustPressed(`P1_ACTION_${action}`) || this.isJustPressed(action),
+      isJustReleased: (action) => this.isJustReleased(`P1_${action}`) || this.isJustReleased(`P1_ACTION_${action}`) || this.isJustReleased(action),
+    };
+  }
+
+  /**
+   * Player 2 input proxy helper for Duo mode.
+   */
+  get p2() {
+    return {
+      isDown: (action) => this.isDown(`P2_${action}`) || this.isDown(`P2_ACTION_${action}`),
+      isJustPressed: (action) => this.isJustPressed(`P2_${action}`) || this.isJustPressed(`P2_ACTION_${action}`),
+      isJustReleased: (action) => this.isJustReleased(`P2_${action}`) || this.isJustReleased(`P2_ACTION_${action}`),
+    };
   }
 
   /**
@@ -322,15 +389,21 @@ export class InputController {
    */
   _handleKeyDown(e) {
     const action = this.keyMap[e.code] || this.keyMap[e.key];
-    if (action) {
-      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code)) {
-        if (typeof e.preventDefault === 'function') {
-          e.preventDefault();
-        }
+    const duoAction = DUO_KEY_MAP[e.code] || DUO_KEY_MAP[e.key];
+
+    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code)) {
+      if (typeof e.preventDefault === 'function') {
+        e.preventDefault();
       }
-      if (!e.repeat) {
+    }
+
+    if (!e.repeat) {
+      if (action) {
         this._setPressed(action, true);
         this._updateDomButtonVisual(action, true);
+      }
+      if (duoAction) {
+        this._setPressed(duoAction, true);
       }
     }
   }
@@ -341,9 +414,14 @@ export class InputController {
    */
   _handleKeyUp(e) {
     const action = this.keyMap[e.code] || this.keyMap[e.key];
+    const duoAction = DUO_KEY_MAP[e.code] || DUO_KEY_MAP[e.key];
+
     if (action) {
       this._setPressed(action, false);
       this._updateDomButtonVisual(action, false);
+    }
+    if (duoAction) {
+      this._setPressed(duoAction, false);
     }
   }
 

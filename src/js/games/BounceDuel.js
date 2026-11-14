@@ -67,15 +67,19 @@ export class BounceDuel extends BaseGame {
     const input = this.context.input;
     const sound = this.context.sound;
 
+    const isDuo = !!this.context.isDuoMode;
     let playerMoved = 0;
 
-    // 1. Player Paddle Movement
-    if (input.isDown('LEFT') || input.isJustPressed('LEFT')) {
+    // 1. Player 1 (Bottom Paddle) Movement
+    const p1Left = isDuo ? input.p1.isDown('LEFT') : (input.isDown('LEFT') || input.isJustPressed('LEFT'));
+    const p1Right = isDuo ? input.p1.isDown('RIGHT') : (input.isDown('RIGHT') || input.isJustPressed('RIGHT'));
+
+    if (p1Left) {
       if (this.playerX > 0) {
         this.playerX--;
         playerMoved = -1;
       }
-    } else if (input.isDown('RIGHT') || input.isJustPressed('RIGHT')) {
+    } else if (p1Right) {
       if (this.playerX + this.paddleWidth < 10) {
         this.playerX++;
         playerMoved = 1;
@@ -83,26 +87,38 @@ export class BounceDuel extends BaseGame {
     }
 
     // Smash Strike buffer (Button A)
-    if (input.isJustPressed('ACTION_A')) {
+    const p1ActionA = isDuo ? input.p1.isJustPressed('ACTION_A') : input.isJustPressed('ACTION_A');
+    if (p1ActionA) {
       this.smashActive = true;
     }
 
     // English Curve Slice (Button B)
-    if (input.isJustPressed('ACTION_B')) {
+    const p1ActionB = isDuo ? input.p1.isJustPressed('ACTION_B') : input.isJustPressed('ACTION_B');
+    if (p1ActionB) {
       this.englishSpin = playerMoved * 2;
       sound.playRotate();
     }
 
-    // 2. AI Paddle Movement (Tracks ball with variable reaction delay)
-    const diff = this.context.difficulty || 'MEDIUM';
-    const aiCenter = this.aiX + this.paddleWidth / 2;
-    const aiSpeed = diff === 'HARD' ? 1.0 : (diff === 'MEDIUM' ? 0.7 : 0.45);
+    // 2. Opponent (Top Paddle) Movement
+    if (isDuo) {
+      // Human Player 2 controls top paddle via P2 controls (Arrow keys or p2 proxy)
+      if (input.p2.isDown('LEFT')) {
+        if (this.aiX > 0) this.aiX--;
+      } else if (input.p2.isDown('RIGHT')) {
+        if (this.aiX + this.paddleWidth < 10) this.aiX++;
+      }
+    } else {
+      // AI Paddle Movement (Tracks ball with variable reaction delay)
+      const diff = this.context.difficulty || 'MEDIUM';
+      const aiCenter = this.aiX + this.paddleWidth / 2;
+      const aiSpeed = diff === 'HARD' ? 1.0 : (diff === 'MEDIUM' ? 0.7 : 0.45);
 
-    if (Math.random() < aiSpeed) {
-      if (this.ball.x < aiCenter - 0.5 && this.aiX > 0) {
-        this.aiX--;
-      } else if (this.ball.x > aiCenter + 0.5 && this.aiX + this.paddleWidth < 10) {
-        this.aiX++;
+      if (Math.random() < aiSpeed) {
+        if (this.ball.x < aiCenter - 0.5 && this.aiX > 0) {
+          this.aiX--;
+        } else if (this.ball.x > aiCenter + 0.5 && this.aiX + this.paddleWidth < 10) {
+          this.aiX++;
+        }
       }
     }
 
@@ -150,10 +166,16 @@ export class BounceDuel extends BaseGame {
         sound.playBounce();
         this.smashActive = false;
       } else if (this.ball.y > 19.5) {
-        // Goal scored by AI!
+        // Goal scored against Player 1 (by Player 2 / AI)
         this.aiScore++;
         sound.playExplosion();
+        if (this.context.isDuoMode && typeof this.context.onDuoScore === 'function') {
+          this.context.onDuoScore(this.playerScore, this.aiScore);
+        }
         if (this.aiScore >= this.targetGoals) {
+          if (this.context.isDuoMode && typeof this.context.onDuoGameOver === 'function') {
+            this.context.onDuoGameOver('PLAYER 2', this.playerScore, this.aiScore);
+          }
           this.gameOver();
           return;
         }
@@ -161,7 +183,7 @@ export class BounceDuel extends BaseGame {
       }
     }
 
-    // Paddle Hit: AI (Row 1)
+    // Paddle Hit: AI / Player 2 (Row 1)
     if (this.ball.y <= 1.5 && this.ball.dy < 0) {
       if (this.ball.x >= this.aiX - 0.6 && this.ball.x <= this.aiX + this.paddleWidth + 0.6) {
         const hitOffset = (this.ball.x - (this.aiX + this.paddleWidth / 2)) / (this.paddleWidth / 2);
@@ -171,13 +193,19 @@ export class BounceDuel extends BaseGame {
         this.rallyCount++;
         sound.playBounce();
       } else if (this.ball.y < 0.5) {
-        // Goal scored by Player!
+        // Goal scored by Player 1!
         this.playerScore++;
         this.addScore(200);
         sound.playScore();
+        if (this.context.isDuoMode && typeof this.context.onDuoScore === 'function') {
+          this.context.onDuoScore(this.playerScore, this.aiScore);
+        }
         if (this.playerScore >= this.targetGoals) {
           sound.playVictory();
           this.addScore(1500);
+          if (this.context.isDuoMode && typeof this.context.onDuoGameOver === 'function') {
+            this.context.onDuoGameOver('PLAYER 1', this.playerScore, this.aiScore);
+          }
           this.gameOver();
           return;
         }

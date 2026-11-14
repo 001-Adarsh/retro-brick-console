@@ -14,6 +14,7 @@ export class GridTactics extends BaseGame {
     this.playerWins = 0;
     this.aiWins = 0;
     this.round = 1;
+    this.currentTurn = 1; // 1 = Player 1 (X), 2 = Player 2 / AI (O)
     this.isAiTurn = false;
     this.aiDelayTimer = 0;
     this.roundOver = false;
@@ -27,6 +28,7 @@ export class GridTactics extends BaseGame {
     this.playerWins = 0;
     this.aiWins = 0;
     this.round = 1;
+    this.currentTurn = 1;
     this.initRound();
   }
 
@@ -34,6 +36,7 @@ export class GridTactics extends BaseGame {
     this.board = Array.from({ length: this.boardSize }, () => new Uint8Array(this.boardSize));
     this.cursor = { x: Math.floor(this.boardSize / 2), y: Math.floor(this.boardSize / 2) };
     this.isAiTurn = false;
+    this.currentTurn = 1;
     this.roundOver = false;
     this.roundOverTimer = 0;
   }
@@ -66,8 +69,10 @@ export class GridTactics extends BaseGame {
       return;
     }
 
-    // AI Turn Execution
-    if (this.isAiTurn) {
+    const isDuo = !!this.context.isDuoMode;
+
+    // AI Turn Execution (Solo mode only)
+    if (!isDuo && this.isAiTurn) {
       this.aiDelayTimer += deltaTime;
       if (this.aiDelayTimer >= 0.4) {
         this.makeAiMove();
@@ -76,31 +81,48 @@ export class GridTactics extends BaseGame {
       return;
     }
 
-    // Player Turn Cursor Navigation
-    if (input.isJustPressed('LEFT') && this.cursor.x > 0) {
+    // Active input for turn (Supports P1, P2, and shared console buttons)
+    const activeInput = isDuo && this.currentTurn === 2 ? input.p2 : input.p1;
+    const moveLeft = activeInput.isJustPressed('LEFT') || input.isJustPressed('LEFT');
+    const moveRight = activeInput.isJustPressed('RIGHT') || input.isJustPressed('RIGHT');
+    const moveUp = activeInput.isJustPressed('UP') || input.isJustPressed('UP');
+    const moveDown = activeInput.isJustPressed('DOWN') || input.isJustPressed('DOWN');
+    const placeToken = activeInput.isJustPressed('ACTION_A') || input.isJustPressed('ACTION_A');
+
+    // Cursor Navigation
+    if (moveLeft && this.cursor.x > 0) {
       this.cursor.x--;
       sound.playMove();
-    } else if (input.isJustPressed('RIGHT') && this.cursor.x < this.boardSize - 1) {
+    } else if (moveRight && this.cursor.x < this.boardSize - 1) {
       this.cursor.x++;
       sound.playMove();
-    } else if (input.isJustPressed('UP') && this.cursor.y > 0) {
+    } else if (moveUp && this.cursor.y > 0) {
       this.cursor.y--;
       sound.playMove();
-    } else if (input.isJustPressed('DOWN') && this.cursor.y < this.boardSize - 1) {
+    } else if (moveDown && this.cursor.y < this.boardSize - 1) {
       this.cursor.y++;
       sound.playMove();
     }
 
     // Place Token (Button A)
-    if (input.isJustPressed('ACTION_A')) {
+    if (placeToken) {
       if (this.board[this.cursor.y][this.cursor.x] === 0) {
-        this.board[this.cursor.y][this.cursor.x] = 1; // Player X
+        const token = isDuo ? this.currentTurn : 1;
+        this.board[this.cursor.y][this.cursor.x] = token;
         sound.playScore();
 
         // Check Win
-        if (this.checkWin(1)) {
-          this.playerWins++;
-          this.addScore(300);
+        if (this.checkWin(token)) {
+          if (token === 1) {
+            this.playerWins++;
+            this.addScore(300);
+          } else {
+            this.aiWins++;
+            if (isDuo) this.addScore(300);
+          }
+          if (isDuo && typeof this.context.onDuoScore === 'function') {
+            this.context.onDuoScore(this.playerWins, this.aiWins);
+          }
           sound.playLevelUp();
           this.roundOver = true;
           return;
@@ -112,8 +134,12 @@ export class GridTactics extends BaseGame {
           return;
         }
 
-        this.isAiTurn = true;
-        this.aiDelayTimer = 0;
+        if (isDuo) {
+          this.currentTurn = this.currentTurn === 1 ? 2 : 1;
+        } else {
+          this.isAiTurn = true;
+          this.aiDelayTimer = 0;
+        }
       }
     }
   }
