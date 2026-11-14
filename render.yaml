@@ -3,9 +3,9 @@
 # Docs: https://render.com/docs/blueprint-spec
 
 services:
-  - type: static
+  - type: web
     name: retro-brick-console
-    env: static
+    runtime: static
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     pullRequestPreviewsEnabled: true
