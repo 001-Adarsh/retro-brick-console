@@ -1,0 +1,563 @@
+/**
+ * Retro Brick Game Console - Physical Console Styling
+ * Ergonomic chassis, tactile D-pad, action buttons, bezel, speaker grille.
+ */
+
+/* ==========================================================================
+   CONSOLE SHELL & CASING
+   ========================================================================== */
+.console-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.console-shell {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--chassis-bg);
+  background-image: 
+    var(--chassis-texture),
+    linear-gradient(180deg, var(--chassis-highlight) 0%, var(--chassis-bg) 25%, var(--chassis-shadow) 100%);
+  border-radius: var(--radius-console);
+  box-shadow: var(--shadow-console-desk);
+  border: 1px solid var(--chassis-border);
+  padding: 24px 22px 36px 22px;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
+}
+
+/* Subtle side ridges / thumb grip texturing */
+.console-shell::before,
+.console-shell::after {
+  content: "";
+  position: absolute;
+  top: 35%;
+  width: 6px;
+  height: 90px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 3px,
+    transparent 3px,
+    transparent 8px
+  );
+  border-radius: 3px;
+  pointer-events: none;
+}
+.console-shell::before { left: 4px; }
+.console-shell::after { right: 4px; }
+
+/* Console Header Branding */
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 0 6px;
+}
+
+.console-brand-text {
+  font-family: var(--font-hardware);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--chassis-silk-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.console-power-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-hardware);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--chassis-silk-text);
+}
+
+.power-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #27ae60;
+  box-shadow: 0 0 6px #2ecc71, inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.power-led.off {
+  background-color: #7f8c8d;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   SCREEN BEZEL & CASING INSET
+   ========================================================================== */
+.screen-bezel {
+  position: relative;
+  background-color: var(--bezel-bg);
+  background-image: linear-gradient(180deg, #1f2124 0%, #2b2e34 100%);
+  border-radius: var(--radius-bezel);
+  padding: 16px 14px 14px 14px;
+  box-shadow: var(--shadow-bezel-inset);
+  border: 2px solid var(--bezel-border);
+  margin-bottom: 24px;
+}
+
+/* Decorative silk-screen stripes framing the screen */
+.bezel-decorative-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.bezel-accent-stripes {
+  display: flex;
+  gap: 3px;
+  height: 4px;
+  width: 50px;
+}
+.bezel-accent-stripes .stripe-red {
+  flex: 1;
+  background-color: var(--bezel-accent-red);
+  border-radius: 1px;
+}
+.bezel-accent-stripes .stripe-blue {
+  flex: 1;
+  background-color: var(--bezel-accent-blue);
+  border-radius: 1px;
+}
+
+.bezel-title-text {
+  font-family: var(--font-hardware);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #adb5bd;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   CONTROLS SECTION: D-PAD, ACTION BUTTONS, FUNCTION BUTTONS
+   ========================================================================== */
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Secondary Meta Buttons Row (Sound, Pause, Reset) */
+.meta-controls-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 4px 12px;
+}
+
+.meta-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-meta {
+  width: 44px;
+  height: 18px;
+  border-radius: var(--radius-button-pill);
+  background: linear-gradient(180deg, var(--btn-meta-highlight) 0%, var(--btn-meta-bg) 60%, var(--btn-meta-shadow) 100%);
+  box-shadow: 0 3px 0 var(--btn-meta-shadow), 0 4px 6px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform var(--transition-tactile-press), box-shadow var(--transition-tactile-press);
+  touch-action: manipulation;
+  outline: none;
+}
+
+.btn-meta:active,
+.btn-meta.active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--btn-meta-shadow), 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.meta-label {
+  font-family: var(--font-hardware);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--btn-meta-label);
+  text-transform: uppercase;
+}
+
+/* Primary Game Controls Row: D-Pad (Left), Start/Select (Center), Action (Right) */
+.primary-controls-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 140px;
+  align-items: center;
+  justify-items: center;
+  padding-top: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   TACTILE CROSS-SHAPED D-PAD
+   -------------------------------------------------------------------------- */
+.dpad-container {
+  position: relative;
+  width: 126px;
+  height: 126px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpad-well {
+  position: absolute;
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.12) 60%, rgba(0, 0, 0, 0.25) 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+.dpad-cross {
+  position: relative;
+  width: 112px;
+  height: 112px;
+}
+
+.dpad-btn {
+  position: absolute;
+  background-color: var(--btn-dpad-bg);
+  background-image: linear-gradient(180deg, var(--btn-dpad-highlight) 0%, var(--btn-dpad-bg) 60%, var(--btn-dpad-shadow) 100%);
+  box-shadow: var(--shadow-dpad-rest);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  outline: none;
+  transition: transform var(--transition-tactile-press), box-shadow var(--transition-tactile-press);
+}
+
+.dpad-btn::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Up */
+.dpad-btn.up {
+  top: 0;
+  left: 38px;
+  width: 36px;
+  height: 42px;
+  border-radius: 6px 6px 0 0;
+}
+.dpad-btn.up::after {
+  border-width: 0 6px 8px 6px;
+  border-color: transparent transparent var(--btn-dpad-arrow) transparent;
+  top: 10px;
+}
+
+/* Down */
+.dpad-btn.down {
+  bottom: 0;
+  left: 38px;
+  width: 36px;
+  height: 42px;
+  border-radius: 0 0 6px 6px;
+}
+.dpad-btn.down::after {
+  border-width: 8px 6px 0 6px;
+  border-color: var(--btn-dpad-arrow) transparent transparent transparent;
+  bottom: 10px;
+}
+
+/* Left */
+.dpad-btn.left {
+  left: 0;
+  top: 38px;
+  width: 42px;
+  height: 36px;
+  border-radius: 6px 0 0 6px;
+}
+.dpad-btn.left::after {
+  border-width: 6px 8px 6px 0;
+  border-color: transparent var(--btn-dpad-arrow) transparent transparent;
+  left: 10px;
+}
+
+/* Right */
+.dpad-btn.right {
+  right: 0;
+  top: 38px;
+  width: 42px;
+  height: 36px;
+  border-radius: 0 6px 6px 0;
+}
+.dpad-btn.right::after {
+  border-width: 6px 0 6px 8px;
+  border-color: transparent transparent transparent var(--btn-dpad-arrow);
+  right: 10px;
+}
+
+/* Center Pivot Ring */
+.dpad-center {
+  position: absolute;
+  top: 38px;
+  left: 38px;
+  width: 36px;
+  height: 36px;
+  background-color: var(--btn-dpad-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dpad-center-indent {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #141518 0%, #2a2c30 100%);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Active / Pressed Kinematics */
+.dpad-btn:active,
+.dpad-btn.active {
+  box-shadow: var(--shadow-dpad-pressed);
+}
+.dpad-btn.up:active, .dpad-btn.up.active { transform: translateY(2.5px); }
+.dpad-btn.down:active, .dpad-btn.down.active { transform: translateY(-2.5px); }
+.dpad-btn.left:active, .dpad-btn.left.active { transform: translateX(2.5px); }
+.dpad-btn.right:active, .dpad-btn.right.active { transform: translateX(-2.5px); }
+
+/* --------------------------------------------------------------------------
+   START & SELECT BUTTONS (CENTER CLUSTER)
+   -------------------------------------------------------------------------- */
+.center-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.small-meta-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-small-meta {
+  width: 36px;
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--btn-meta-highlight) 0%, var(--btn-meta-bg) 70%, var(--btn-meta-shadow) 100%);
+  box-shadow: 0 2px 0 var(--btn-meta-shadow), 0 3px 5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  outline: none;
+  transition: transform var(--transition-tactile-press), box-shadow var(--transition-tactile-press);
+}
+.btn-small-meta:active,
+.btn-small-meta.active {
+  transform: translateY(1.5px);
+  box-shadow: 0 0.5px 0 var(--btn-meta-shadow), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   PRIMARY ACTION BUTTONS A & B (RIGHT CLUSTER)
+   -------------------------------------------------------------------------- */
+.action-cluster {
+  position: relative;
+  width: 130px;
+  height: 126px;
+}
+
+.action-btn-wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Button A: High-Right (Rotate / Fire) */
+.action-btn-wrapper.a-wrap {
+  top: 4px;
+  right: 6px;
+}
+
+/* Button B: Low-Left (Dash / Secondary) */
+.action-btn-wrapper.b-wrap {
+  bottom: 8px;
+  left: 6px;
+}
+
+.btn-action {
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-hardware);
+  font-weight: 800;
+  transition: transform var(--transition-tactile-press), box-shadow var(--transition-tactile-press);
+  touch-action: manipulation;
+}
+
+.btn-action-a {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 35% 30%, var(--btn-action-a-highlight) 0%, var(--btn-action-a-bg) 60%, var(--btn-action-a-shadow) 100%);
+  box-shadow: var(--shadow-action-a-rest);
+  color: var(--btn-action-a-text);
+  font-size: 18px;
+}
+.btn-action-a:active,
+.btn-action-a.active {
+  transform: translateY(3.5px) scale(0.97);
+  box-shadow: var(--shadow-action-a-pressed);
+}
+
+.btn-action-b {
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle at 35% 30%, var(--btn-action-b-highlight) 0%, var(--btn-action-b-bg) 60%, var(--btn-action-b-shadow) 100%);
+  box-shadow: var(--shadow-action-b-rest);
+  color: var(--btn-action-b-text);
+  font-size: 16px;
+}
+.btn-action-b:active,
+.btn-action-b.active {
+  transform: translateY(3.5px) scale(0.97);
+  box-shadow: var(--shadow-action-b-pressed);
+}
+
+.action-label {
+  font-family: var(--font-hardware);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--chassis-silk-text);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   SPEAKER GRILLE
+   ========================================================================== */
+.speaker-grille {
+  align-self: flex-end;
+  display: flex;
+  gap: 6px;
+  margin-top: 18px;
+  padding-right: 14px;
+}
+
+.grille-slot {
+  width: 4px;
+  height: 24px;
+  border-radius: 2px;
+  background-color: #141517;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: rotate(-30deg);
+}
+.grille-slot:nth-child(1) { height: 16px; }
+.grille-slot:nth-child(2) { height: 20px; }
+.grille-slot:nth-child(3) { height: 24px; }
+.grille-slot:nth-child(4) { height: 26px; }
+.grille-slot:nth-child(5) { height: 24px; }
+.grille-slot:nth-child(6) { height: 20px; }
+.grille-slot:nth-child(7) { height: 16px; }
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 480px) {
+  .console-container {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .console-shell {
+    max-width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    padding: 12px 14px 20px 14px;
+    justify-content: space-between;
+  }
+
+  .screen-bezel {
+    margin-bottom: 12px;
+    padding: 10px;
+  }
+
+  .primary-controls-row {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .dpad-container {
+    width: 116px;
+    height: 116px;
+  }
+  .dpad-well {
+    width: 114px;
+    height: 114px;
+  }
+  .dpad-cross {
+    width: 104px;
+    height: 104px;
+  }
+  .dpad-btn.up, .dpad-btn.down {
+    left: 35px;
+    width: 34px;
+    height: 38px;
+  }
+  .dpad-btn.left, .dpad-btn.right {
+    top: 35px;
+    width: 38px;
+    height: 34px;
+  }
+  .dpad-center {
+    top: 35px;
+    left: 35px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .action-cluster {
+    width: 120px;
+    height: 116px;
+  }
+  .btn-action-a {
+    width: 58px;
+    height: 58px;
+  }
+  .btn-action-b {
+    width: 50px;
+    height: 50px;
+  }
+}

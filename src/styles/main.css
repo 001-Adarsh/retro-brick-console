@@ -1,0 +1,143 @@
+/**
+ * Retro Brick Game Console - Main Entry Stylesheet
+ * Integrates design tokens, console hardware shell, LCD optics, and base styles.
+ */
+
+@import "./design-tokens.css";
+@import "./console.css";
+@import "./lcd-theme.css";
+@import "./modals.css";
+
+/* ==========================================================================
+   CSS RESET & BASE ENVIRONMENT
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: #16181b;
+  background-image: 
+    radial-gradient(circle at 50% 30%, #22262c 0%, #121416 100%);
+  color: #e0e0e0;
+  font-family: var(--font-hardware);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure no text selection during aggressive button pressing */
+button,
+canvas,
+.dpad-container,
+.action-cluster,
+.console-shell {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & FOCUS STYLES
+   ========================================================================== */
+:focus-visible {
+  outline: 3px solid #f1c40f;
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   DESKTOP COMPANION SIDEBAR (HOTKEY HINTS & SOUND STATUS)
+   ========================================================================== */
+.desktop-companion-panel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .console-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .desktop-companion-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: rgba(30, 34, 40, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 24px;
+    width: 260px;
+    color: #abb2bf;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .companion-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #e5c07b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+  }
+
+  .key-binding-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+  }
+
+  .key-binding-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .key-badge {
+    background: #282c34;
+    border: 1px solid #4b5263;
+    box-shadow: 0 2px 0 #1e2227;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #61afef;
+  }
+}
+
+/* ==========================================================================
+   PREFERS-REDUCED-MOTION COMPLIANCE
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

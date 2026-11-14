@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Authentic Retro Brick Game Handheld 23-in-1 Console with Web Audio and 10x20 Virtual LCD Dot-Matrix Display">
+  <meta name="theme-color" content="#d8d3c5">
+  <title>BRICK GAME 23 IN 1 - Vintage Handheld Console</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+  <div class="console-wrapper">
+    <!-- Desktop Hotkey Helper Companion Panel -->
+    <aside class="desktop-companion-panel" aria-label="Desktop Controls Guide">
+      <div class="companion-title">CONSOLE CONTROLS</div>
+      <ul class="key-binding-list">
+        <li class="key-binding-item">
+          <span>D-Pad Move</span>
+          <div><kbd class="key-badge">▲ ▼ ◄ ►</kbd> <kbd class="key-badge">W A S D</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>Action A (Rotate/Fire)</span>
+          <div><kbd class="key-badge">Space</kbd> <kbd class="key-badge">J</kbd> <kbd class="key-badge">Z</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>Action B (Drop/Dash)</span>
+          <div><kbd class="key-badge">Shift</kbd> <kbd class="key-badge">K</kbd> <kbd class="key-badge">X</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>Start Game</span>
+          <kbd class="key-badge">Enter</kbd>
+        </li>
+        <li class="key-binding-item">
+          <span>Select / Mode</span>
+          <div><kbd class="key-badge">Tab</kbd> <kbd class="key-badge">O</kbd></div>
+        </li>
+        <li class="key-binding-item">
+          <span>Pause / Resume</span>
+          <kbd class="key-badge">P</kbd>
+        </li>
+        <li class="key-binding-item">
+          <span>Sound Toggle</span>
+          <kbd class="key-badge">M</kbd>
+        </li>
+        <li class="key-binding-item">
+          <span>Reset System</span>
+          <kbd class="key-badge">R</kbd>
+        </li>
+        <li class="key-binding-item">
+          <span>Menu / Cancel</span>
+          <kbd class="key-badge">Esc</kbd>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Physical Console Housing -->
+    <main class="console-container" id="console-container">
+      <div class="console-shell" id="console-shell">
+        <!-- Console Top Header Branding -->
+        <header class="console-header">
+          <h1 class="console-brand-text">BRICK 23 IN 1</h1>
+          <div class="console-power-badge">
+            <span class="power-led" id="power-led" aria-hidden="true"></span>
+            <span>POWER</span>
+          </div>
+        </header>
+
+        <!-- Recessed Screen Bezel -->
+        <section class="screen-bezel" id="screen-bezel" aria-label="Screen Housing">
+          <div class="bezel-decorative-top" aria-hidden="true">
+            <div class="bezel-accent-stripes">
+              <span class="stripe-red"></span>
+              <span class="stripe-blue"></span>
+            </div>
+            <span class="bezel-title-text">AUTO POWER OFF / SOUND</span>
+            <div class="bezel-accent-stripes">
+              <span class="stripe-blue"></span>
+              <span class="stripe-red"></span>
+            </div>
+          </div>
+
+          <!-- Vintage LCD Display Window -->
+          <div class="lcd-screen-window" id="lcd-screen-window" role="region" aria-label="LCD Dot-Matrix Display">
+            <div class="lcd-viewport">
+              <!-- Left: Primary 10x20 Virtual Dot-Matrix Canvas -->
+              <div class="lcd-canvas-container" id="canvas-container">
+                <canvas id="main-canvas" class="lcd-main-canvas" width="240" height="480" aria-label="10 by 20 LCD Matrix Playfield"></canvas>
+                <div class="lcd-ghost-grid" id="ghost-grid" aria-hidden="true"></div>
+              </div>
+
+              <!-- Right: Telemetry Sidebar HUD -->
+              <aside class="lcd-sidebar" aria-label="Game Telemetry">
+                <!-- Score Display -->
+                <div class="hud-module">
+                  <div class="hud-label">SCORE</div>
+                  <div class="hud-7segment" id="hud-score" aria-live="off">
+                    <span class="unlit-digits">00000</span><span>0</span>
+                  </div>
+                </div>
+
+                <!-- High Score Display -->
+                <div class="hud-module">
+                  <div class="hud-label">HI-SCORE</div>
+                  <div class="hud-7segment" id="hud-hiscore">
+                    <span class="unlit-digits">00000</span><span>0</span>
+                  </div>
+                </div>
+
+                <!-- Next Polyomino / Auxiliary Radar (4x4) -->
+                <div class="hud-module">
+                  <div class="hud-label">NEXT</div>
+                  <div class="submatrix-container" id="submatrix-container">
+                    <canvas id="submatrix-canvas" class="submatrix-canvas" width="48" height="48" aria-label="Next Piece 4x4 Preview"></canvas>
+                  </div>
+                </div>
+
+                <!-- Speed Gauge (10 segment bar) -->
+                <div class="hud-module">
+                  <div class="hud-label">SPEED</div>
+                  <div class="hud-meter-bar" id="hud-speed-meter" aria-label="Speed Gauge: 1 of 10">
+                    <div class="meter-pip lit"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                    <div class="meter-pip"></div>
+                  </div>
+                </div>
+
+                <!-- Numerical Level Display -->
+                <div class="hud-module">
+                  <div class="hud-label">LEVEL</div>
+                  <div class="hud-7segment" id="hud-level">01</div>
+                </div>
+
+                <!-- Player Lives Counter -->
+                <div class="hud-module">
+                  <div class="hud-label">LIVES</div>
+                  <div class="hud-lives-row" id="hud-lives" aria-label="3 Lives Remaining">
+                    <div class="life-icon lit"></div>
+                    <div class="life-icon lit"></div>
+                    <div class="life-icon lit"></div>
+                  </div>
+                </div>
+
+                <!-- Status Flags -->
+                <div class="hud-flags-row">
+                  <span class="hud-flag-badge" id="hud-flag-pause">PAUSE</span>
+                  <span class="hud-flag-badge active" id="hud-flag-sound">♪ ON</span>
+                </div>
+              </aside>
+            </div>
+
+            <!-- ==========================================================
+                 ACCESSIBLE LCD OVERLAYS & MODALS
+                 ========================================================== -->
+
+            <!-- 1. Boot Screen Overlay -->
+            <div id="modal-boot" class="lcd-modal-overlay boot-screen" role="region" aria-label="System Self-Test Boot Sequence">
+              <div class="lcd-modal-header">
+                <div class="lcd-modal-title">BRICK 23-IN-1</div>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="boot-grid-test" id="boot-grid-test" aria-hidden="true"></div>
+                <div class="boot-marquee" id="boot-marquee">SELF-TEST OK</div>
+                <div class="boot-progress-bar">
+                  <div class="boot-progress-fill" id="boot-progress-fill"></div>
+                </div>
+              </div>
+              <div class="lcd-modal-footer">
+                <span class="hud-label">READY (1990s LCD)</span>
+              </div>
+            </div>
+
+            <!-- 2. Game Selector Menu Carousel -->
+            <div id="modal-menu" class="lcd-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="menu-dialog-title">
+              <div class="lcd-modal-header">
+                <h2 id="menu-dialog-title" class="lcd-modal-title">SELECT GAME</h2>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="menu-carousel">
+                  <div class="menu-game-badge" id="menu-game-index">GAME 01 / 23</div>
+                  <div class="menu-game-title" id="menu-game-title">BRICK STACKER</div>
+                  <div class="menu-game-category" id="menu-game-category">PUZZLE</div>
+                  
+                  <div class="menu-nav-row">
+                    <button class="menu-nav-arrow" id="menu-btn-prev" aria-label="Previous Game">◄</button>
+                    <div class="menu-game-preview-container">
+                      <canvas id="menu-preview-canvas" class="menu-game-preview-canvas" width="64" height="64" aria-label="Game Preview Thumbnail"></canvas>
+                    </div>
+                    <button class="menu-nav-arrow" id="menu-btn-next" aria-label="Next Game">►</button>
+                  </div>
+
+                  <div class="menu-hiscore-text" id="menu-game-hiscore">HI-SCORE: 000000</div>
+                  <button class="lcd-btn" id="menu-btn-start" style="width: 140px; margin-top: 4px;">PLAY [A / START]</button>
+                  
+                  <div class="menu-sub-links">
+                    <button class="menu-link-btn" id="menu-link-scores">SCORES</button>
+                    <span>|</span>
+                    <button class="menu-link-btn" id="menu-link-settings">SETTINGS</button>
+                  </div>
+                </div>
+              </div>
+              <div class="lcd-modal-footer">
+                <span class="hud-label">◄ ► CHANGE   [A] PLAY</span>
+              </div>
+            </div>
+
+            <!-- 3. In-Game Pause Menu -->
+            <div id="modal-pause" class="lcd-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pause-dialog-title">
+              <div class="lcd-modal-header">
+                <h2 id="pause-dialog-title" class="lcd-modal-title">== PAUSED ==</h2>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="pause-menu-list" role="menu">
+                  <button class="pause-option selected" id="pause-opt-resume" role="menuitem">&gt; RESUME</button>
+                  <button class="pause-option" id="pause-opt-restart" role="menuitem">&nbsp;&nbsp;RESTART</button>
+                  <button class="pause-option" id="pause-opt-scores" role="menuitem">&nbsp;&nbsp;HIGH SCORES</button>
+                  <button class="pause-option" id="pause-opt-settings" role="menuitem">&nbsp;&nbsp;SETTINGS</button>
+                  <button class="pause-option" id="pause-opt-menu" role="menuitem">&nbsp;&nbsp;MAIN MENU</button>
+                </div>
+              </div>
+              <div class="lcd-modal-footer">
+                <span class="hud-label">▲ ▼ NAVIGATE   [A] SELECT</span>
+              </div>
+            </div>
+
+            <!-- 4. Game Over Overlay -->
+            <div id="modal-gameover" class="lcd-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="gameover-dialog-title">
+              <div class="lcd-modal-header">
+                <h2 id="gameover-dialog-title" class="gameover-banner">GAME OVER</h2>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="gameover-stat-box">
+                  <div class="gameover-stat-line">
+                    <span>SCORE:</span>
+                    <strong id="gameover-score-val">000000</strong>
+                  </div>
+                  <div class="gameover-stat-line">
+                    <span>HI-SCORE:</span>
+                    <strong id="gameover-hiscore-val">000000</strong>
+                  </div>
+                  <div class="gameover-stat-line">
+                    <span>LEVEL:</span>
+                    <strong id="gameover-level-val">1</strong>
+                  </div>
+                  <div id="gameover-record-badge" class="new-record-alert hidden">★ NEW RECORD! ★</div>
+                </div>
+
+                <button class="lcd-btn" id="gameover-btn-restart" style="width: 140px; margin-top: 6px;">PLAY AGAIN [A]</button>
+                <button class="lcd-btn secondary" id="gameover-btn-menu" style="width: 140px;">MENU [SELECT]</button>
+              </div>
+              <div class="lcd-modal-footer">
+                <span class="hud-label">PRESS [A] TO RESTART</span>
+              </div>
+            </div>
+
+            <!-- 5. High Scores Leaderboard Modal -->
+            <div id="modal-highscores" class="lcd-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="scores-dialog-title">
+              <div class="lcd-modal-header">
+                <h2 id="scores-dialog-title" class="lcd-modal-title">HIGH SCORES</h2>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="highscores-scroll-area">
+                  <table class="highscores-table" aria-label="Game High Scores List">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>GAME</th>
+                        <th style="text-align: right;">SCORE</th>
+                      </tr>
+                    </thead>
+                    <tbody id="highscores-table-body">
+                      <!-- Dynamic rows filled by HUD/Storage -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="lcd-modal-footer">
+                <button class="lcd-btn danger" id="scores-btn-clear" style="font-size: 8px;">CLEAR ALL</button>
+                <button class="lcd-btn" id="scores-btn-close">BACK [B / ESC]</button>
+              </div>
+            </div>
+
+            <!-- 6. System Settings Modal -->
+            <div id="modal-settings" class="lcd-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settings-dialog-title">
+              <div class="lcd-modal-header">
+                <h2 id="settings-dialog-title" class="lcd-modal-title">SETTINGS</h2>
+              </div>
+              <div class="lcd-modal-body">
+                <div class="settings-list">
+                  <!-- Volume Slider -->
+                  <div class="settings-item">
+                    <label for="setting-volume">VOLUME:</label>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                      <input type="range" id="setting-volume" min="0" max="100" value="80" class="settings-slider">
+                      <span id="setting-volume-num" style="min-width: 24px; font-weight: bold;">80%</span>
+                    </div>
+                  </div>
+
+                  <!-- Audio Mute -->
+                  <div class="settings-item">
+                    <label>AUDIO:</label>
+                    <button class="segmented-btn active" id="setting-audio-toggle">SOUND: ON</button>
+                  </div>
+
+                  <!-- Difficulty Setting -->
+                  <div class="settings-item">
+                    <label>DIFFICULTY:</label>
+                    <div class="segmented-group" id="setting-difficulty-group">
+                      <button class="segmented-btn" data-diff="EASY">EASY</button>
+                      <button class="segmented-btn active" data-diff="MEDIUM">MED</button>
+                      <button class="segmented-btn" data-diff="HARD">HARD</button>
+                    </div>
+                  </div>
+
+                  <!-- LCD Theme Palette -->
+                  <div class="settings-item">
+                    <label for="setting-theme">LCD THEME:</label>
+                    <select id="setting-theme" class="settings-select">
+                      <option value="classic">VINTAGE GREEN</option>
+                      <option value="mono">MONOCHROME 1989</option>
+                      <option value="amber">AMBER NIGHT</option>
+                      <option value="cyber">CYBER MATRIX</option>
+                    </select>
+                  </div>
+
+                  <!-- Haptic Vibration Feedback -->
+                  <div class="settings-item">
+                    <label>HAPTICS:</label>
+                    <button class="segmented-btn active" id="setting-haptics-toggle">ENABLED</button>
+                  </div>
+                </div>
+              </div>
+              <div class="lcd-modal-footer">
+                <button class="lcd-btn danger" id="setting-reset-factory" style="font-size: 8px;">FACTORY RESET</button>
+                <button class="lcd-btn" id="settings-btn-close">BACK [B / ESC]</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Interactive Physical Controls -->
+        <section class="controls-section" aria-label="Physical Hardware Controls">
+          <!-- Row 1: Function / Meta Buttons (Sound, Pause, Reset) -->
+          <div class="meta-controls-row">
+            <div class="meta-button-wrapper">
+              <button id="btn-sound" class="btn-meta" aria-label="Toggle Sound" data-action="SOUND"></button>
+              <span class="meta-label">SOUND</span>
+            </div>
+            <div class="meta-button-wrapper">
+              <button id="btn-pause" class="btn-meta" aria-label="Pause Game" data-action="PAUSE"></button>
+              <span class="meta-label">PAUSE</span>
+            </div>
+            <div class="meta-button-wrapper">
+              <button id="btn-reset" class="btn-meta" aria-label="Reset System" data-action="RESET"></button>
+              <span class="meta-label">RESET</span>
+            </div>
+          </div>
+
+          <!-- Row 2: Cross D-Pad, Select/Start, Action A & B -->
+          <div class="primary-controls-row">
+            <!-- Left: Cross D-Pad -->
+            <div class="dpad-container" aria-label="Directional D-Pad">
+              <div class="dpad-well"></div>
+              <div class="dpad-cross">
+                <button id="btn-dpad-up" class="dpad-btn up" aria-label="D-Pad Up" data-action="UP"></button>
+                <button id="btn-dpad-down" class="dpad-btn down" aria-label="D-Pad Down" data-action="DOWN"></button>
+                <button id="btn-dpad-left" class="dpad-btn left" aria-label="D-Pad Left" data-action="LEFT"></button>
+                <button id="btn-dpad-right" class="dpad-btn right" aria-label="D-Pad Right" data-action="RIGHT"></button>
+                <div class="dpad-center" aria-hidden="true">
+                  <div class="dpad-center-indent"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Center: Start & Select Meta Cluster -->
+            <div class="center-cluster">
+              <div class="small-meta-wrapper">
+                <button id="btn-select" class="btn-small-meta" aria-label="Select Game Mode" data-action="SELECT"></button>
+                <span class="meta-label">SELECT</span>
+              </div>
+              <div class="small-meta-wrapper">
+                <button id="btn-start" class="btn-small-meta" aria-label="Start Game" data-action="START"></button>
+                <span class="meta-label">START</span>
+              </div>
+            </div>
+
+            <!-- Right: Domed Primary Action Buttons (A & B) -->
+            <div class="action-cluster" aria-label="Action Buttons">
+              <!-- Button A (Top-Right: Rotate / Fire) -->
+              <div class="action-btn-wrapper a-wrap">
+                <button id="btn-action-a" class="btn-action btn-action-a" aria-label="Button A - Rotate / Primary Action" data-action="ACTION_A">A</button>
+                <span class="action-label">ROTATE</span>
+              </div>
+
+              <!-- Button B (Bottom-Left: Dash / Secondary Action) -->
+              <div class="action-btn-wrapper b-wrap">
+                <button id="btn-action-b" class="btn-action btn-action-b" aria-label="Button B - Drop / Secondary Action" data-action="ACTION_B">B</button>
+                <span class="action-label">ACTION</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Molded Acoustic Speaker Grille -->
+        <div class="speaker-grille" aria-hidden="true">
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+          <div class="grille-slot"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ARIA Live Region for Screen Reader Announcements -->
+    <div id="aria-live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

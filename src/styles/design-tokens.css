@@ -1,0 +1,179 @@
+/**
+ * Retro Brick Game Console - Design Tokens
+ * Industrial design, LCD optics, typography, elevation, and responsive variables.
+ */
+
+:root {
+  /* ==========================================================================
+     1. HARDWARE CHASSIS COLORWAYS
+     ========================================================================== */
+  /* Default: Classic Vintage Gray / Beige */
+  --chassis-bg: #d8d3c5;
+  --chassis-highlight: #ece8dc;
+  --chassis-shadow: #b2aa97;
+  --chassis-shadow-dark: #8e8673;
+  --chassis-border: #9b9380;
+  --chassis-texture: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.04) 100%);
+  --chassis-silk-text: #5c5549;
+
+  /* Shell Theme 2: Arcade Yellow */
+  --chassis-yellow-bg: #e5a924;
+  --chassis-yellow-highlight: #f8c948;
+  --chassis-yellow-shadow: #b88012;
+  --chassis-yellow-shadow-dark: #8c5d05;
+  --chassis-yellow-border: #a26e0b;
+  --chassis-yellow-silk: #3d2b07;
+
+  /* Shell Theme 3: Glacial Teal */
+  --chassis-teal-bg: #32909e;
+  --chassis-teal-highlight: #52b1bf;
+  --chassis-teal-shadow: #206570;
+  --chassis-teal-shadow-dark: #124047;
+  --chassis-teal-border: #1a565f;
+  --chassis-teal-silk: #0c2b30;
+
+  /* Shell Theme 4: Stealth Charcoal */
+  --chassis-dark-bg: #272a2e;
+  --chassis-dark-highlight: #3c4046;
+  --chassis-dark-shadow: #17181a;
+  --chassis-dark-shadow-dark: #0d0e0f;
+  --chassis-dark-border: #1f2124;
+  --chassis-dark-silk: #7d848f;
+
+  /* ==========================================================================
+     2. LCD OPTICAL DISPLAY TOKENS
+     ========================================================================== */
+  /* Theme: Vintage Greenish-Amber (Standard) */
+  --lcd-bg-base: #9dac86;
+  --lcd-bg-gradient-top: #a4b38d;
+  --lcd-bg-gradient-bottom: #95a37e;
+  --lcd-pixel-lit: #1a2b1a;
+  --lcd-pixel-ghost: rgba(26, 43, 26, 0.085);
+  --lcd-border-subtle: rgba(26, 43, 26, 0.12);
+  --lcd-glass-glare: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.03) 30%, transparent 55%);
+
+  /* Theme: Classic Monochrome 1989 (Game Boy Green) */
+  --lcd-mono-bg: #8b956d;
+  --lcd-mono-lit: #1f2415;
+  --lcd-mono-ghost: rgba(31, 36, 21, 0.09);
+
+  /* Theme: Amber Night Backlight */
+  --lcd-amber-bg: #c8ab6d;
+  --lcd-amber-lit: #2d1c0b;
+  --lcd-amber-ghost: rgba(45, 28, 11, 0.08);
+
+  /* Theme: Cyber High-Contrast (Accessibility) */
+  --lcd-cyber-bg: #0d120d;
+  --lcd-cyber-lit: #39ff14;
+  --lcd-cyber-ghost: rgba(57, 255, 20, 0.06);
+
+  /* ==========================================================================
+     3. BEZEL & SCREEN FRAME TOKENS
+     ========================================================================== */
+  --bezel-bg: #26292d;
+  --bezel-border: #141517;
+  --bezel-highlight: rgba(255, 255, 255, 0.12);
+  --bezel-shadow-deep: rgba(0, 0, 0, 0.7);
+  --bezel-accent-red: #c0392b;
+  --bezel-accent-blue: #2980b9;
+  --bezel-silk-gold: #d4af37;
+
+  /* ==========================================================================
+     4. TACTILE BUTTON TOKENS
+     ========================================================================== */
+  /* D-Pad */
+  --btn-dpad-bg: #2d3136;
+  --btn-dpad-highlight: #464c54;
+  --btn-dpad-shadow: #181a1d;
+  --btn-dpad-shadow-dark: #0f1012;
+  --btn-dpad-arrow: rgba(255, 255, 255, 0.38);
+
+  /* Primary Action Button A (Rotate / Fire) */
+  --btn-action-a-bg: #c0392b;
+  --btn-action-a-highlight: #e74c3c;
+  --btn-action-a-shadow: #7e1e15;
+  --btn-action-a-shadow-dark: #52110a;
+  --btn-action-a-text: #ffffff;
+
+  /* Secondary Action Button B (Dash / Action B) */
+  --btn-action-b-bg: #2980b9;
+  --btn-action-b-highlight: #3498db;
+  --btn-action-b-shadow: #1b5175;
+  --btn-action-b-shadow-dark: #10344d;
+  --btn-action-b-text: #ffffff;
+
+  /* Auxiliary Function Buttons (Start, Select, Pause, Sound, Reset) */
+  --btn-meta-bg: #3f444a;
+  --btn-meta-highlight: #565d66;
+  --btn-meta-shadow: #212427;
+  --btn-meta-text: #9aa2ad;
+  --btn-meta-label: #524b40;
+
+  /* ==========================================================================
+     5. TYPOGRAPHY & FONTS
+     ========================================================================== */
+  --font-hardware: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-lcd-segment: "Courier New", monospace;
+  --font-lcd-pixel: "Courier New", monospace;
+
+  /* ==========================================================================
+     6. GEOMETRY, RADII & ELEVATIONS
+     ========================================================================== */
+  --radius-console: 32px;
+  --radius-bezel: 16px;
+  --radius-lcd: 6px;
+  --radius-button-pill: 9999px;
+
+  /* Desktop Console Elevations */
+  --shadow-console-desk: 
+    0 32px 64px -12px rgba(0, 0, 0, 0.45),
+    0 16px 24px -8px rgba(0, 0, 0, 0.25),
+    0 0 0 1px var(--chassis-border);
+  
+  --shadow-bezel-inset:
+    inset 0 4px 10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 2px rgba(0, 0, 0, 0.9),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.15);
+
+  --shadow-lcd-inset:
+    inset 0 2px 5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(0, 0, 0, 0.6);
+
+  --shadow-dpad-rest:
+    0 5px 0 var(--btn-dpad-shadow),
+    0 8px 12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+  --shadow-dpad-pressed:
+    0 1.5px 0 var(--btn-dpad-shadow),
+    0 3px 6px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.4);
+
+  --shadow-action-a-rest:
+    0 6px 0 var(--btn-action-a-shadow),
+    0 9px 14px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35);
+
+  --shadow-action-a-pressed:
+    0 2px 0 var(--btn-action-a-shadow),
+    0 3px 5px rgba(0, 0, 0, 0.25),
+    inset 0 2px 5px rgba(0, 0, 0, 0.4);
+
+  --shadow-action-b-rest:
+    0 6px 0 var(--btn-action-b-shadow),
+    0 9px 14px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35);
+
+  --shadow-action-b-pressed:
+    0 2px 0 var(--btn-action-b-shadow),
+    0 3px 5px rgba(0, 0, 0, 0.25),
+    inset 0 2px 5px rgba(0, 0, 0, 0.4);
+
+  /* ==========================================================================
+     7. ANIMATION & TIMINGS
+     ========================================================================== */
+  --transition-tactile-press: 60ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --transition-tactile-release: 120ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  --transition-modal: 180ms ease-out;
+  --transition-theme: 240ms ease;
+}

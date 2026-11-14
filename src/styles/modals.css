@@ -1,0 +1,451 @@
+/**
+ * Retro Brick Game Console - Modal & Overlay Styling
+ * Authentic LCD overlays for Boot, Menu, Pause, Game Over, High Scores, Settings.
+ */
+
+.lcd-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--lcd-bg-base);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: opacity var(--transition-modal);
+  overflow: hidden;
+}
+
+.lcd-modal-overlay.hidden {
+  display: none !important;
+  opacity: 0;
+}
+
+.lcd-modal-header {
+  width: 100%;
+  border-bottom: 1.5px dashed var(--lcd-border-subtle);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.lcd-modal-title {
+  font-family: var(--font-lcd-segment);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: var(--lcd-pixel-lit);
+  text-transform: uppercase;
+}
+
+.lcd-modal-body {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow-y: auto;
+  font-family: var(--font-lcd-pixel);
+  color: var(--lcd-pixel-lit);
+}
+
+.lcd-modal-footer {
+  width: 100%;
+  border-top: 1.5px dashed var(--lcd-border-subtle);
+  padding-top: 6px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   BUTTONS & INTERACTIVE ELEMENTS INSIDE LCD
+   ========================================================================== */
+.lcd-btn {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg-base);
+  font-family: var(--font-lcd-pixel);
+  font-size: 10px;
+  font-weight: 800;
+  border: 1px solid var(--lcd-pixel-lit);
+  padding: 5px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: background 0.1s, color 0.1s;
+}
+
+.lcd-btn:hover,
+.lcd-btn:focus-visible,
+.lcd-btn.active {
+  background: transparent;
+  color: var(--lcd-pixel-lit);
+  outline: 1.5px solid var(--lcd-pixel-lit);
+}
+
+.lcd-btn.secondary {
+  background: transparent;
+  color: var(--lcd-pixel-lit);
+  border: 1px solid var(--lcd-border-subtle);
+}
+
+.lcd-btn.secondary:hover,
+.lcd-btn.secondary:focus-visible {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg-base);
+}
+
+.lcd-btn.danger {
+  border-style: double;
+}
+
+/* ==========================================================================
+   1. BOOT SCREEN OVERLAY
+   ========================================================================== */
+.boot-screen {
+  background-color: var(--lcd-bg-base);
+}
+
+.boot-grid-test {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 2px;
+  width: 140px;
+  height: 112px;
+  margin: 6px auto;
+}
+
+.boot-grid-test .test-brick {
+  background-color: var(--lcd-pixel-lit);
+  border-radius: 0.5px;
+}
+
+.boot-marquee {
+  font-family: var(--font-lcd-segment);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: var(--lcd-pixel-lit);
+  text-transform: uppercase;
+  min-height: 16px;
+}
+
+.boot-progress-bar {
+  width: 120px;
+  height: 6px;
+  border: 1px solid var(--lcd-pixel-lit);
+  padding: 1px;
+  margin-top: 4px;
+}
+
+.boot-progress-fill {
+  width: 0%;
+  height: 100%;
+  background-color: var(--lcd-pixel-lit);
+  transition: width 0.1s ease;
+}
+
+/* ==========================================================================
+   2. GAME SELECTOR CAROUSEL MENU
+   ========================================================================== */
+.menu-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 6px;
+}
+
+.menu-game-badge {
+  font-family: var(--font-lcd-segment);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--lcd-pixel-lit);
+  background: rgba(26, 43, 26, 0.08);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.menu-game-title {
+  font-family: var(--font-lcd-segment);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--lcd-pixel-lit);
+  text-transform: uppercase;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.menu-game-category {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--lcd-pixel-lit);
+  opacity: 0.85;
+  border: 1px solid var(--lcd-border-subtle);
+  padding: 1px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.menu-game-preview-container {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--lcd-border-subtle);
+  background: rgba(0, 0, 0, 0.04);
+  position: relative;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-game-preview-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.menu-hiscore-text {
+  font-family: var(--font-lcd-segment);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--lcd-pixel-lit);
+}
+
+.menu-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 180px;
+}
+
+.menu-nav-arrow {
+  background: none;
+  border: none;
+  font-family: var(--font-lcd-segment);
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--lcd-pixel-lit);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.menu-nav-arrow:hover,
+.menu-nav-arrow:focus-visible {
+  outline: 1px dashed var(--lcd-pixel-lit);
+}
+
+.menu-sub-links {
+  display: flex;
+  gap: 12px;
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.menu-link-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-lcd-pixel);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--lcd-pixel-lit);
+  text-decoration: underline;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. PAUSE MENU OVERLAY
+   ========================================================================== */
+.pause-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 160px;
+}
+
+.pause-option {
+  font-family: var(--font-lcd-segment);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--lcd-pixel-lit);
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pause-option:hover,
+.pause-option:focus-visible,
+.pause-option.selected {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg-base);
+}
+
+/* ==========================================================================
+   4. GAME OVER OVERLAY
+   ========================================================================== */
+.gameover-banner {
+  font-family: var(--font-lcd-segment);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--lcd-pixel-lit);
+  animation: lcd-blink 1s step-end infinite;
+}
+
+@keyframes lcd-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.gameover-stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px dashed var(--lcd-border-subtle);
+  padding: 8px 12px;
+  width: 100%;
+  max-width: 180px;
+  font-family: var(--font-lcd-segment);
+}
+
+.gameover-stat-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.new-record-alert {
+  font-family: var(--font-lcd-segment);
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--lcd-bg-base);
+  background: var(--lcd-pixel-lit);
+  padding: 2px 4px;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   5. HIGH SCORES LEADERBOARD MODAL
+   ========================================================================== */
+.highscores-scroll-area {
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid var(--lcd-border-subtle);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.highscores-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+  font-family: var(--font-lcd-segment);
+}
+
+.highscores-table th {
+  text-align: left;
+  border-bottom: 1px solid var(--lcd-border-subtle);
+  padding: 2px 4px;
+  font-size: 8px;
+  color: var(--lcd-pixel-lit);
+  opacity: 0.8;
+}
+
+.highscores-table td {
+  padding: 3px 4px;
+  border-bottom: 1px dotted var(--lcd-border-subtle);
+  color: var(--lcd-pixel-lit);
+}
+
+.highscores-table td.score-num {
+  text-align: right;
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   6. SETTINGS MODAL
+   ========================================================================== */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 190px;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  font-family: var(--font-lcd-pixel);
+  width: 100%;
+}
+
+.settings-item label {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.settings-slider {
+  width: 70px;
+  accent-color: var(--lcd-pixel-lit);
+  cursor: pointer;
+}
+
+.settings-select {
+  font-family: var(--font-lcd-pixel);
+  font-size: 9px;
+  background: var(--lcd-bg-base);
+  color: var(--lcd-pixel-lit);
+  border: 1px solid var(--lcd-pixel-lit);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.segmented-group {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.segmented-btn {
+  font-family: var(--font-lcd-pixel);
+  font-size: 8px;
+  background: none;
+  border: 1px solid var(--lcd-border-subtle);
+  color: var(--lcd-pixel-lit);
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+.segmented-btn.active {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg-base);
+  border-color: var(--lcd-pixel-lit);
+}

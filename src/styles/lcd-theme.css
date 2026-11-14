@@ -1,0 +1,342 @@
+/**
+ * Retro Brick Game Console - LCD Screen & Theme Styling
+ * Reflective optical substrate, ghost pixel matrix, 7-segment HUD, glare overlay.
+ */
+
+/* ==========================================================================
+   LCD SCREEN WINDOW
+   ========================================================================== */
+.lcd-screen-window {
+  position: relative;
+  width: 100%;
+  background-color: var(--lcd-bg-base);
+  background-image: linear-gradient(180deg, var(--lcd-bg-gradient-top) 0%, var(--lcd-bg-gradient-bottom) 100%);
+  border-radius: var(--radius-lcd);
+  box-shadow: var(--shadow-lcd-inset);
+  padding: 12px 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glass Glare Overlay */
+.lcd-screen-window::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--lcd-glass-glare);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Subtle LCD Horizontal Polarizer Scanlines */
+.lcd-screen-window::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.035) 0px,
+    rgba(0, 0, 0, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   LCD VIEWPORT / MAIN PLAYFIELD & SIDEBAR HUD
+   ========================================================================== */
+.lcd-viewport {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 12px;
+  align-items: stretch;
+  min-height: 280px;
+}
+
+/* Left: Main Canvas Grid Container (10x20 Matrix) */
+.lcd-canvas-container {
+  position: relative;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--lcd-border-subtle);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 2;
+  overflow: hidden;
+}
+
+.lcd-main-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* Ghost Pixel Grid Overlay for Main Playfield (10 cols x 20 rows) */
+.lcd-ghost-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(20, 1fr);
+  gap: 1.5px;
+  padding: 1.5px;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.ghost-brick {
+  border: 1px solid var(--lcd-pixel-ghost);
+  border-radius: 0.5px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.ghost-brick::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 30%;
+  transform: translate(-50%, -50%);
+  background-color: var(--lcd-pixel-ghost);
+}
+
+/* ==========================================================================
+   RIGHT: LCD HUD SIDEBAR TELEMETRY
+   ========================================================================== */
+.lcd-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 1px dashed var(--lcd-border-subtle);
+  padding-left: 10px;
+}
+
+.hud-module {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hud-label {
+  font-family: var(--font-hardware);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--lcd-pixel-lit);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Segmented 7-Segment Numbers */
+.hud-7segment {
+  font-family: var(--font-lcd-segment);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: var(--lcd-pixel-lit);
+  background: transparent;
+  line-height: 1;
+}
+
+.hud-7segment .unlit-digits {
+  color: var(--lcd-pixel-ghost);
+}
+
+/* Sub-Matrix: Next Piece / Radar (4x4) */
+.submatrix-container {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--lcd-border-subtle);
+  background: rgba(0, 0, 0, 0.02);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1px;
+  padding: 2px;
+  box-sizing: border-box;
+  margin-top: 2px;
+  position: relative;
+}
+
+.submatrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Gauge Meters: Speed & Level Segment Bars */
+.hud-meter-bar {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.meter-pip {
+  flex: 1;
+  height: 100%;
+  background-color: var(--lcd-pixel-ghost);
+  border-radius: 0.5px;
+}
+
+.meter-pip.lit {
+  background-color: var(--lcd-pixel-lit);
+}
+
+/* Lives Indicator: Segmented Heart/Icon row */
+.hud-lives-row {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.life-icon {
+  width: 10px;
+  height: 9px;
+  background-color: var(--lcd-pixel-ghost);
+  clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 50% 80%, 18% 100%, 0% 35%);
+}
+
+.life-icon.lit {
+  background-color: var(--lcd-pixel-lit);
+}
+
+/* Sound & Status Flags */
+.hud-flags-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4px;
+  border-top: 1px solid var(--lcd-border-subtle);
+}
+
+.hud-flag-badge {
+  font-family: var(--font-hardware);
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--lcd-pixel-ghost);
+  letter-spacing: 0.5px;
+}
+
+.hud-flag-badge.active {
+  color: var(--lcd-pixel-lit);
+}
+
+/* ==========================================================================
+   LCD OVERLAY MODALS & SCREENS
+   ========================================================================== */
+.lcd-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(157, 172, 134, 0.94);
+  backdrop-filter: blur(2px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: opacity var(--transition-modal);
+}
+
+.lcd-modal-overlay.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.lcd-modal-title {
+  font-family: var(--font-lcd-pixel);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--lcd-pixel-lit);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.lcd-modal-content {
+  font-family: var(--font-lcd-pixel);
+  font-size: 11px;
+  color: var(--lcd-pixel-lit);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.lcd-modal-button {
+  background: var(--lcd-pixel-lit);
+  color: var(--lcd-bg-base);
+  font-family: var(--font-lcd-pixel);
+  font-size: 11px;
+  font-weight: 800;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   LCD THEME CLASSES (Dynamically toggled on .lcd-screen-window)
+   ========================================================================== */
+
+/* Monochrome 1989 Style */
+.theme-mono-1989 {
+  --lcd-bg-base: var(--lcd-mono-bg);
+  --lcd-bg-gradient-top: #939d73;
+  --lcd-bg-gradient-bottom: #848e66;
+  --lcd-pixel-lit: var(--lcd-mono-lit);
+  --lcd-pixel-ghost: var(--lcd-mono-ghost);
+}
+
+/* Warm Amber Night */
+.theme-amber-night {
+  --lcd-bg-base: var(--lcd-amber-bg);
+  --lcd-bg-gradient-top: #cfb376;
+  --lcd-bg-gradient-bottom: #be9f5f;
+  --lcd-pixel-lit: var(--lcd-amber-lit);
+  --lcd-pixel-ghost: var(--lcd-amber-ghost);
+}
+
+/* Cyber High-Contrast Accessibility Mode */
+.theme-cyber-high-contrast {
+  --lcd-bg-base: var(--lcd-cyber-bg);
+  --lcd-bg-gradient-top: #121812;
+  --lcd-bg-gradient-bottom: #090c09;
+  --lcd-pixel-lit: var(--lcd-cyber-lit);
+  --lcd-pixel-ghost: var(--lcd-cyber-ghost);
+  --lcd-border-subtle: rgba(57, 255, 20, 0.2);
+}
+
+.theme-cyber-high-contrast .lcd-screen-window::after {
+  display: none; /* No glare in high-contrast mode */
+}
