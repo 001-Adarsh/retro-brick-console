@@ -84,6 +84,23 @@ export class BrickStacker extends BaseGame {
       return;
     }
 
+    // Check Manual Steer / Nudge (Left / Right)
+    if (input.isJustPressed('LEFT')) {
+      if (this.girderX > 0) {
+        this.girderX--;
+        this.girderDir = -1;
+        this.moveTimer = 0;
+        sound.playMove();
+      }
+    } else if (input.isJustPressed('RIGHT')) {
+      if (this.girderX + this.girderWidth < 10) {
+        this.girderX++;
+        this.girderDir = 1;
+        this.moveTimer = 0;
+        sound.playMove();
+      }
+    }
+
     // Update Sheared Debris Animation
     for (let i = this.shearedParts.length - 1; i >= 0; i--) {
       const p = this.shearedParts[i];

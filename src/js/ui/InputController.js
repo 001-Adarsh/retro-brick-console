@@ -49,6 +49,20 @@ const DEFAULT_KEY_MAP = {
   KeyA: InputActions.LEFT,
   KeyD: InputActions.RIGHT,
 
+  // Lowercase & Uppercase direct key fallbacks
+  ArrowUp: InputActions.UP,
+  ArrowDown: InputActions.DOWN,
+  ArrowLeft: InputActions.LEFT,
+  ArrowRight: InputActions.RIGHT,
+  w: InputActions.UP,
+  W: InputActions.UP,
+  s: InputActions.DOWN,
+  S: InputActions.DOWN,
+  a: InputActions.LEFT,
+  A: InputActions.LEFT,
+  d: InputActions.RIGHT,
+  D: InputActions.RIGHT,
+
   // Primary Action Button A (Rotate / Fire / Select)
   Space: InputActions.ACTION_A,
   KeyJ: InputActions.ACTION_A,
@@ -103,6 +117,7 @@ export class InputController {
   constructor(options = {}) {
     this.keyMap = { ...DEFAULT_KEY_MAP, ...(options.keyMap || {}) };
     this.hapticsEnabled = options.hapticsEnabled ?? true;
+    this.isDuoMode = false;
 
     // State maps
     this.down = new Map();
@@ -192,6 +207,14 @@ export class InputController {
   }
 
   /**
+   * Set Solo or Duo mode for input isolation.
+   * @param {boolean} enabled 
+   */
+  setDuoMode(enabled) {
+    this.isDuoMode = !!enabled;
+  }
+
+  /**
    * Player 1 input proxy helper for Duo mode.
    */
   get p1() {
@@ -228,6 +251,14 @@ export class InputController {
   clearJustPressed() {
     this.justPressed.clear();
     this.justReleased.clear();
+  }
+
+  /**
+   * End-of-frame update to clear transient press/release states.
+   * Called automatically by Engine loop after every update tick.
+   */
+  update() {
+    this.clearJustPressed();
   }
 
   /**
@@ -437,6 +468,7 @@ export class InputController {
     if (isPressed && !wasDown) {
       this.down.set(action, true);
       this.justPressed.set(action, true);
+      this.justReleased.set(action, false);
       this.autoRepeatState.set(action, {
         firstPressed: now,
         lastFired: now,
@@ -444,6 +476,7 @@ export class InputController {
       });
     } else if (!isPressed && wasDown) {
       this.down.set(action, false);
+      this.justPressed.set(action, false);
       this.justReleased.set(action, true);
       this.autoRepeatState.delete(action);
     }

@@ -92,6 +92,9 @@ export class ScreenManager {
     if (this.engine && typeof this.engine.setDuoMode === 'function') {
       this.engine.setDuoMode(this.isDuoMode);
     }
+    if (this.input && typeof this.input.setDuoMode === 'function') {
+      this.input.setDuoMode(this.isDuoMode);
+    }
     this._updateMenuCard();
     if (this.hud && typeof this.hud.announce === 'function') {
       this.hud.announce(this.isDuoMode ? 'Duo Mode Enabled: 2 Players.' : 'Solo Mode Enabled: 1 Player.');
@@ -806,6 +809,66 @@ export class ScreenManager {
       btnHwSelect.addEventListener('click', () => {
         if (this.state === ScreenState.MENU) {
           this.changeSelectedGame(1);
+        } else if (this.state === ScreenState.GAMEOVER) {
+          this.transitionTo(ScreenState.MENU);
+        }
+      });
+    }
+
+    // Physical Virtual D-Pad & Action buttons menu navigation
+    const btnDpadLeft = document.getElementById('btn-dpad-left');
+    const btnDpadRight = document.getElementById('btn-dpad-right');
+    const btnDpadUp = document.getElementById('btn-dpad-up');
+    const btnDpadDown = document.getElementById('btn-dpad-down');
+    const btnActionA = document.getElementById('btn-action-a');
+    const btnActionB = document.getElementById('btn-action-b');
+
+    if (btnDpadLeft) {
+      btnDpadLeft.addEventListener('click', () => {
+        if (this.state === ScreenState.MENU) {
+          this.changeSelectedGame(-1);
+        }
+      });
+    }
+    if (btnDpadRight) {
+      btnDpadRight.addEventListener('click', () => {
+        if (this.state === ScreenState.MENU) {
+          this.changeSelectedGame(1);
+        }
+      });
+    }
+    if (btnDpadUp) {
+      btnDpadUp.addEventListener('click', () => {
+        if (this.state === ScreenState.PAUSED) {
+          this.pauseOptionIndex = (this.pauseOptionIndex - 1 + 5) % 5;
+          this._updatePauseMenuSelection();
+        }
+      });
+    }
+    if (btnDpadDown) {
+      btnDpadDown.addEventListener('click', () => {
+        if (this.state === ScreenState.PAUSED) {
+          this.pauseOptionIndex = (this.pauseOptionIndex + 1) % 5;
+          this._updatePauseMenuSelection();
+        }
+      });
+    }
+    if (btnActionA) {
+      btnActionA.addEventListener('click', () => {
+        if (this.state === ScreenState.MENU) {
+          this.launchSelectedGame();
+        } else if (this.state === ScreenState.PAUSED) {
+          this._selectPauseOption();
+        } else if (this.state === ScreenState.GAMEOVER) {
+          if (this.onGameRestart) this.onGameRestart();
+          this.transitionTo(ScreenState.PLAYING);
+        }
+      });
+    }
+    if (btnActionB) {
+      btnActionB.addEventListener('click', () => {
+        if (this.state === ScreenState.PAUSED) {
+          this.transitionTo(ScreenState.PLAYING);
         } else if (this.state === ScreenState.GAMEOVER) {
           this.transitionTo(ScreenState.MENU);
         }
