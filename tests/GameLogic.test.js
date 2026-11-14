@@ -411,11 +411,18 @@ describe('GameLogic - Core Mechanics', () => {
 
       const originalTile = puzzle.grid[0][0];
 
+      // Mock spawnTile to deterministic location so random spawn doesn't land on (0, 0)
+      vi.spyOn(puzzle, 'spawnTile').mockImplementation(() => {
+        puzzle.grid[3][3] = 4;
+      });
+
       // Perform a move
       mockInput.isJustPressed.mockImplementation((k) => k === 'RIGHT');
       puzzle.update(0.016);
 
       expect(puzzle.grid[0][0]).toBe(0); // Moved away from (0, 0)
+      expect(puzzle.grid[0][3]).toBe(2);
+      expect(puzzle.grid[3][3]).toBe(4);
       expect(puzzle.previousState).toBeDefined();
 
       // Trigger Undo via ACTION_B
@@ -423,6 +430,7 @@ describe('GameLogic - Core Mechanics', () => {
       puzzle.update(0.016);
 
       expect(puzzle.grid[0][0]).toBe(originalTile);
+      expect(puzzle.grid[3][3]).toBe(0);
       expect(puzzle.undoCharges).toBe(0);
       expect(mockSound.playRotate).toHaveBeenCalled();
     });
